@@ -12,26 +12,85 @@ using std::ofstream;
 using std::fstream;
 using std::string;
 
-
+template <typename NODETYPE>
 class BSTNode
 {
 public:
-	BSTNode(const string& newString = "");
+	BSTNode(const NODETYPE& newString, const NODETYPE& newChar);
 
-	string getString(void) const;
+	NODETYPE getmLetter(void) const;
+	NODETYPE getmMorse(void) const;
+	BSTNode<NODETYPE>* getLeftPtr(void) const;
+	BSTNode<NODETYPE>* getRightPtr(void) const;
 
-	BSTNode* getLeftPtr(void) const;
-	BSTNode* getRightPtr(void) const;
-
-	void setLeftPtr(BSTNode* newPtr);
-	void setRightPtr(BSTNode* newPtr);
+	void setmLetter(NODETYPE const newLetter);
+	void setmMorse(NODETYPE const newMorse);
+	void setLeftPtr(BSTNode<NODETYPE>* newPtr);
+	void setRightPtr(BSTNode<NODETYPE>* newPtr);
 
 private:
-	char mLetter;
-	string mMorse;
-	BSTNode* mpLeft;
-	BSTNode* mpRight;
+	NODETYPE mLetter;
+	NODETYPE mMorse;
+	BSTNode<NODETYPE>* mpLeft;
+	BSTNode<NODETYPE>* mpRight;
 };
 
-std::ostream& operator<< (std::ostream& lhs, const BSTNode& rhs);
+
+template<typename NODETYPE>
+BSTNode<NODETYPE>::BSTNode(const NODETYPE& newString, const NODETYPE& newChar) {
+	this->mLetter = newChar;
+	this->mMorse = newString;
+	this->mpLeft = nullptr;
+	this->mpRight = nullptr;
+}
+
+template<typename NODETYPE>
+NODETYPE BSTNode<NODETYPE>::getmLetter() const {
+	return this->mLetter;
+}
+
+template<typename NODETYPE>
+NODETYPE BSTNode<NODETYPE>::getmMorse() const {
+	return this->mMorse;
+}
+
+template<typename NODETYPE>
+BSTNode<NODETYPE>* BSTNode<NODETYPE>::getLeftPtr() const {
+	return this->mpLeft;
+}
+
+template<typename NODETYPE>
+BSTNode<NODETYPE>* BSTNode<NODETYPE>::getRightPtr() const {
+	return this->mpRight;
+}
+
+template<typename NODETYPE>
+void BSTNode<NODETYPE>::setmLetter(NODETYPE const newLetter) {
+	this->mLetter = newLetter;
+}
+
+template<typename NODETYPE>
+void BSTNode<NODETYPE>::setmMorse(NODETYPE const newMorse) {
+	this->mMorse = newMorse;
+}
+
+template<typename NODETYPE>
+void BSTNode<NODETYPE>::setLeftPtr(BSTNode<NODETYPE>* newPtr) {
+	this->mpLeft = newPtr;
+}
+template<typename NODETYPE>
+void BSTNode<NODETYPE>::setRightPtr(BSTNode<NODETYPE>* newPtr) {
+	this->mpRight = newPtr;
+}
+
+template<typename NODETYPE>
+std::fstream& operator<< (std::fstream& lhs, const BSTNode<std::string>& rhs) {
+	char data[100] = "";
+	lhs.getline(data, 100);
+	rhs.setmLetter(data[0]);
+	lhs.getline(data, 100);
+	rhs.setmMorse(data);
+
+	return lhs;
+}
 
