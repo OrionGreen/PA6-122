@@ -23,31 +23,39 @@ public:
 
 	~BST();
 
-	void insert(const CLASSTYPE& newMorse, const CLASSTYPE& newchar);
+	void insert(const CLASSTYPE& newMorse, const char& newchar);
 
 	
-	void inorderTraversal();
-	void preorderTraversal();
-	void postorderTraversal();
+	void inorderTraversal(const char& Letter);
+	void convertText();
 
 private:
 	void insert(BSTNode<CLASSTYPE>* pTree,
-		const CLASSTYPE& newMorse, const CLASSTYPE& newChar);
+		const CLASSTYPE& newMorse, const char& newChar);
 
 	void chopTree(BSTNode<CLASSTYPE>* pTree);
 
-	void inorderTraversal(BSTNode<CLASSTYPE>* pTree);
+	void inorderTraversal(fstream& outfile, BSTNode<CLASSTYPE>* pTree, const char& Letter);
 
-	void preorderTraversal(BSTNode<CLASSTYPE>* pTree);
-
-	void postorderTraversal(BSTNode<CLASSTYPE>* pTree);
+	void convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree);
 
 	BSTNode<CLASSTYPE>* mpRoot;
 };
 
 template<class CLASSTYPE>
 BST<CLASSTYPE>::BST() {
-
+	fstream table;
+	if (!table.is_open()) {
+		table.open("MorseTable.txt", std::ios::in);
+		while (!table.eof()) {
+			char morse[100] = "";
+			char character = '\0';
+			table.getline(character, 1);
+			table.getline(morse, 100);
+			insert(morse, character);
+		}
+		table.close();
+	}
 }
 
 template<class CLASSTYPE>
@@ -56,23 +64,17 @@ BST<CLASSTYPE>::~BST() {
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::insert(const CLASSTYPE& newMorse, const CLASSTYPE& newchar) {
+void BST<CLASSTYPE>::insert(const CLASSTYPE& newMorse, const char& newchar) {
 	insert(this->mpRoot, newMorse, newChar);
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderTraversal() {
-	inorderTraversal(this->mpRoot);
-}
-
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::preorderTraversal() {
-	preorderTraversal(this->mpRoot);
-}
-
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::postorderTraversal() {
-	postorderTraversal(this->mpRoot);
+void BST<CLASSTYPE>::inorderTraversal(const char& Letter) {
+	fstream outfile;
+	if (!outfile.is_open()) {
+		outfile.open("MorseOutput.txt", std::ios::out);
+	}
+	inorderTraversal(outfile,this->mpRoot, Letter);
 }
 
 //private versions
@@ -86,7 +88,7 @@ void BST<CLASSTYPE>::chopTree(BSTNode<CLASSTYPE>* pTree) {
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse, const CLASSTYPE& newChar) {
+void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse, const char& newChar) {
 	if (pTree == nullptr)
 	{
 		this->mpRoot = new BSTNode(newMorse, newChar);
@@ -122,33 +124,36 @@ void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderTraversal(BSTNode<CLASSTYPE>* pTree) {
-
+void BST<CLASSTYPE>::inorderTraversal(fstream& outfile, BSTNode<CLASSTYPE>* pTree, const char& Letter) {
 	if (pTree != nullptr)
 	{
-		inorderTraversal(pTree->getLeftPtr());
-		cout << pTree->getString() << endl;
-		inorderTraversal(pTree->getRightPtr());
+		inorderTraversal(outfile, pTree->getLeftPtr(), Letter);
+		if (Letter == pTree->getmLetter) {
+			cout << pTree->getmMorse() << " ";
+			outfile << pTree->getmMorse() << " ";
+		}
+		inorderTraversal(outfile, pTree->getRightPtr(), Letter);
+	}
+	
+}
+
+template<class CLASSTYPE>
+void BST<CLASSTYPE>::convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree) {
+	char data[100] = "";
+
+	while (!lhs.eof()) {
+		infile.getline(data, 100);
+		int i = 0;
+		while (data[i] != '\n') {
+			toupper(data[i]);
+			inorderTraversal(data[i]);
+			i++;
+		}
+		cout << endl;
 	}
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::preorderTraversal(BSTNode<CLASSTYPE>* pTree) {
-	if (pTree != nullptr)
-	{
-		cout << pTree->getString() << endl;
-		preorderTraversal(pTree->getLeftPtr());
-		preorderTraversal(pTree->getRightPtr());
-	}
-}
-
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::postorderTraversal(BSTNode<CLASSTYPE>* pTree) {
-	if (pTree != nullptr)
-	{
-		postorderTraversal(pTree->getLeftPtr());
-		postorderTraversal(pTree->getRightPtr());
-		cout << pTree->getString() << endl;
-	}
-
+void BST<CLASSTYPE>::convertText() {
+	convertText(this->mpRoot);
 }

@@ -16,20 +16,20 @@ template <typename NODETYPE>
 class BSTNode
 {
 public:
-	BSTNode(const NODETYPE& newString, const NODETYPE& newChar);
+	BSTNode(const NODETYPE& newString, const char& newChar);
 
-	NODETYPE getmLetter(void) const;
+	char getmLetter(void) const;
 	NODETYPE getmMorse(void) const;
 	BSTNode<NODETYPE>* getLeftPtr(void) const;
 	BSTNode<NODETYPE>* getRightPtr(void) const;
 
-	void setmLetter(NODETYPE const newLetter);
+	void setmLetter(char const newLetter);
 	void setmMorse(NODETYPE const newMorse);
 	void setLeftPtr(BSTNode<NODETYPE>* newPtr);
 	void setRightPtr(BSTNode<NODETYPE>* newPtr);
 
 private:
-	NODETYPE mLetter;
+	char mLetter;
 	NODETYPE mMorse;
 	BSTNode<NODETYPE>* mpLeft;
 	BSTNode<NODETYPE>* mpRight;
@@ -37,7 +37,7 @@ private:
 
 
 template<typename NODETYPE>
-BSTNode<NODETYPE>::BSTNode(const NODETYPE& newString, const NODETYPE& newChar) {
+BSTNode<NODETYPE>::BSTNode(const NODETYPE& newString, const char& newChar) {
 	this->mLetter = newChar;
 	this->mMorse = newString;
 	this->mpLeft = nullptr;
@@ -45,7 +45,7 @@ BSTNode<NODETYPE>::BSTNode(const NODETYPE& newString, const NODETYPE& newChar) {
 }
 
 template<typename NODETYPE>
-NODETYPE BSTNode<NODETYPE>::getmLetter() const {
+char BSTNode<NODETYPE>::getmLetter() const {
 	return this->mLetter;
 }
 
@@ -65,7 +65,7 @@ BSTNode<NODETYPE>* BSTNode<NODETYPE>::getRightPtr() const {
 }
 
 template<typename NODETYPE>
-void BSTNode<NODETYPE>::setmLetter(NODETYPE const newLetter) {
+void BSTNode<NODETYPE>::setmLetter(char const newLetter) {
 	this->mLetter = newLetter;
 }
 
@@ -84,7 +84,7 @@ void BSTNode<NODETYPE>::setRightPtr(BSTNode<NODETYPE>* newPtr) {
 }
 
 template<typename NODETYPE>
-std::fstream& operator<< (std::fstream& lhs, const BSTNode<std::string>& rhs) {
+std::fstream& operator >> (std::fstream& lhs, const BSTNode<std::string>& rhs) {
 	char data[100] = "";
 	lhs.getline(data, 100);
 	rhs.setmLetter(data[0]);
