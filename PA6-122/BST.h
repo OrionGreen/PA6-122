@@ -27,7 +27,7 @@ public:
 
 	
 	void inorderTraversal(const char& Letter);
-	void convertText();
+	void convertText(fstream& infile);
 
 private:
 	void insert(BSTNode<CLASSTYPE>* pTree,
@@ -50,7 +50,9 @@ BST<CLASSTYPE>::BST() {
 		while (!table.eof()) {
 			char morse[100] = "";
 			char character = '\0';
-			table.getline(character, 1);
+			char throwaway[20] = "";
+			table.get(character);
+			table.getline(throwaway, 100);
 			table.getline(morse, 100);
 			insert(morse, character);
 		}
@@ -65,7 +67,7 @@ BST<CLASSTYPE>::~BST() {
 
 template<class CLASSTYPE>
 void BST<CLASSTYPE>::insert(const CLASSTYPE& newMorse, const char& newchar) {
-	insert(this->mpRoot, newMorse, newChar);
+	insert(this->mpRoot, newMorse, newchar);
 }
 
 template<class CLASSTYPE>
@@ -91,15 +93,15 @@ template<class CLASSTYPE>
 void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse, const char& newChar) {
 	if (pTree == nullptr)
 	{
-		this->mpRoot = new BSTNode(newMorse, newChar);
+		this->mpRoot = new BSTNode<CLASSTYPE>(newMorse, newChar);
 	}
 	else
 	{
-		if (pTree->getString() > newChar)
+		if (pTree->getmLetter() > newChar)
 		{
 			if (pTree->getLeftPtr() == nullptr)
 			{
-				pTree->setLeftPtr(new BSTNode(newMorse, newChar));
+				pTree->setLeftPtr(new BSTNode<CLASSTYPE>(newMorse, newChar));
 			}
 			else
 			{
@@ -107,12 +109,12 @@ void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse
 			}
 		}
 
-		else if (pTree->getString() < newChar)
+		else if (pTree->getmLetter() < newChar)
 		{
 
 			if (pTree->getRightPtr() == nullptr)
 			{
-				pTree->setRightPtr(new BSTNode(newMorse, newChar));
+				pTree->setRightPtr(new BSTNode<CLASSTYPE>(newMorse, newChar));
 			}
 			else
 			{
@@ -128,7 +130,7 @@ void BST<CLASSTYPE>::inorderTraversal(fstream& outfile, BSTNode<CLASSTYPE>* pTre
 	if (pTree != nullptr)
 	{
 		inorderTraversal(outfile, pTree->getLeftPtr(), Letter);
-		if (Letter == pTree->getmLetter) {
+		if (Letter == pTree->getmLetter()) {
 			cout << pTree->getmMorse() << " ";
 			outfile << pTree->getmMorse() << " ";
 		}
@@ -140,11 +142,10 @@ void BST<CLASSTYPE>::inorderTraversal(fstream& outfile, BSTNode<CLASSTYPE>* pTre
 template<class CLASSTYPE>
 void BST<CLASSTYPE>::convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree) {
 	char data[100] = "";
-
-	while (!lhs.eof()) {
+	while (!infile.eof()) {
 		infile.getline(data, 100);
 		int i = 0;
-		while (data[i] != '\n') {
+		while (data[i] != '\0') {
 			toupper(data[i]);
 			inorderTraversal(data[i]);
 			i++;
@@ -154,6 +155,7 @@ void BST<CLASSTYPE>::convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree) {
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::convertText() {
-	convertText(this->mpRoot);
+void BST<CLASSTYPE>::convertText(fstream& infile) {
+	
+	convertText(infile ,this->mpRoot);
 }
