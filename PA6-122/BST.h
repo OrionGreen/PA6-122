@@ -15,6 +15,7 @@ using std::fstream;
 using std::vector;
 using std::string;
 
+//class template for a BST
 template <class CLASSTYPE>
 class BST
 {
@@ -25,7 +26,7 @@ public:
 
 	void insert(const CLASSTYPE& newMorse, const char& newchar);
 
-	CLASSTYPE inorderTraversal(const char& Letter);
+	void inorderTraversal(const char& Letter);
 
 	void convertText(fstream& infile);
 
@@ -39,13 +40,14 @@ private:
 
 	void chopTree(BSTNode<CLASSTYPE>* pTree);
 
-	CLASSTYPE inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter);
+	void inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter);
 
 	void convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree);
 
 	BSTNode<CLASSTYPE>* mpRoot;
 };
 
+//populate the BST on creation with the morse table
 template<class CLASSTYPE>
 BST<CLASSTYPE>::BST() {
 	fstream table;
@@ -64,20 +66,23 @@ BST<CLASSTYPE>::BST() {
 	}
 }
 
+//destroys the tree using a chop tree helper function
 template<class CLASSTYPE>
 BST<CLASSTYPE>::~BST() {
 	chopTree(this->mpRoot);
 }
 
+//public insert
 template<class CLASSTYPE>
 void BST<CLASSTYPE>::insert(const CLASSTYPE& newMorse, const char& newchar) {
 	insert(this->mpRoot, newMorse, newchar);
 }
 
+//public inorder traversal 
 template<class CLASSTYPE>
-CLASSTYPE BST<CLASSTYPE>::inorderTraversal(const char& Letter) {
+void BST<CLASSTYPE>::inorderTraversal(const char& Letter) {
 	
-	return inorderTraversal(this->mpRoot, Letter);
+	inorderTraversal(this->mpRoot, Letter);
 }
 
 //private versions
@@ -90,6 +95,7 @@ void BST<CLASSTYPE>::chopTree(BSTNode<CLASSTYPE>* pTree) {
 	}
 }
 
+//private insert
 template<class CLASSTYPE>
 void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse, const char& newChar) {
 	if (pTree == nullptr)
@@ -126,19 +132,21 @@ void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse
 
 }
 
+//private inorderTraversal which prints out the morse code of the letter entere
 template<class CLASSTYPE>
-CLASSTYPE BST<CLASSTYPE>::inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter) {
+void BST<CLASSTYPE>::inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter) {
 	if (pTree != nullptr)
 	{
 		inorderTraversal(pTree->getLeftPtr(), Letter);
 		if (Letter == pTree->getmLetter()) {
-			return pTree->getmMorse();
+			cout << pTree->getmMorse()<< " ";
 		}
 		inorderTraversal(pTree->getRightPtr(), Letter);
 	}
 	
 }
 
+//prints which prints in order of the tree which starts leftmost starting with my space character
 template<class CLASSTYPE>
 void BST<CLASSTYPE>::inorderPrint() {
 	inorderPrint(this->mpRoot);
@@ -156,29 +164,20 @@ void BST<CLASSTYPE>::inorderPrint(BSTNode<CLASSTYPE>* pTree) {
 
 }
 
+//converting text from a file take lines to upper case and insert each char into the traversal function which then prints the stuff.
 template<class CLASSTYPE>
 void BST<CLASSTYPE>::convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree) {
 	char data[100] = "";
-	fstream outfile;
-	if (!outfile.is_open()) {
-		outfile.open("MorseOutput.txt", std::ios::out);
-	}
 	CLASSTYPE dat;
 	while (!infile.eof()) {
 		infile.getline(data, 100);
 		int i = 0;
 		while (data[i] != '\0') {
 			data[i] = toupper(data[i]);
+			inorderTraversal(data[i]);
 			i++;
 		}
-		i = 0;
-		while (data[i] != '\0') {
-			dat = dat + inorderTraversal(data[i]) ;
-			dat = dat + " ";
-			i++;
-		}
-		cout << dat << endl;
-		outfile << dat << endl;
+		cout << endl;
 	}
 }
 

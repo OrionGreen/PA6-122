@@ -147,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Convert.txt" />
-    <Text Include="MorseOutput.txt" />
     <Text Include="MorseTable.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

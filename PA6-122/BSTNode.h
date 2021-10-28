@@ -12,6 +12,7 @@ using std::ofstream;
 using std::fstream;
 using std::string;
 
+//BSTNODE class template
 template <typename NODETYPE>
 class BSTNode
 {
@@ -35,6 +36,7 @@ public:
 	void setRightPtr(BSTNode<NODETYPE>* newPtr);
 
 private:
+	//NODETYPE with a char and 2 extra child nodes
 	char mLetter;
 	NODETYPE mMorse;
 	BSTNode<NODETYPE>* mpLeft;
@@ -50,6 +52,7 @@ BSTNode<NODETYPE>::BSTNode(const NODETYPE& newString, const char& newChar) {
 	this->mpRight = nullptr;
 }
 
+//getters
 template<typename NODETYPE>
 char BSTNode<NODETYPE>::getmLetter() const {
 	return this->mLetter;
@@ -70,6 +73,7 @@ BSTNode<NODETYPE>* BSTNode<NODETYPE>::getRightPtr() const {
 	return this->mpRight;
 }
 
+//setters
 template<typename NODETYPE>
 void BSTNode<NODETYPE>::setmLetter(char const newLetter) {
 	this->mLetter = newLetter;
@@ -89,6 +93,7 @@ void BSTNode<NODETYPE>::setRightPtr(BSTNode<NODETYPE>* newPtr) {
 	this->mpRight = newPtr;
 }
 
+//Not necessary and never used but its an overload
 template<typename NODETYPE>
 std::fstream& operator >> (std::fstream& lhs, const BSTNode<std::string>& rhs) {
 	char data[100] = "";
