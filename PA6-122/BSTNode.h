@@ -19,13 +19,19 @@ public:
 	BSTNode(const NODETYPE& newString, const char& newChar);
 
 	char getmLetter(void) const;
+	
 	NODETYPE getmMorse(void) const;
+	
 	BSTNode<NODETYPE>* getLeftPtr(void) const;
+	
 	BSTNode<NODETYPE>* getRightPtr(void) const;
 
 	void setmLetter(char const newLetter);
+	
 	void setmMorse(NODETYPE const newMorse);
+	
 	void setLeftPtr(BSTNode<NODETYPE>* newPtr);
+	
 	void setRightPtr(BSTNode<NODETYPE>* newPtr);
 
 private:

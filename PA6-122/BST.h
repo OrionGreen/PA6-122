@@ -25,17 +25,21 @@ public:
 
 	void insert(const CLASSTYPE& newMorse, const char& newchar);
 
-	
-	void inorderTraversal(const char& Letter);
+	CLASSTYPE inorderTraversal(const char& Letter);
+
 	void convertText(fstream& infile);
 
+	void inorderPrint();
+
 private:
+	void inorderPrint(BSTNode<CLASSTYPE>* pTree);
+
 	void insert(BSTNode<CLASSTYPE>* pTree,
 		const CLASSTYPE& newMorse, const char& newChar);
 
 	void chopTree(BSTNode<CLASSTYPE>* pTree);
 
-	void inorderTraversal(fstream& outfile, BSTNode<CLASSTYPE>* pTree, const char& Letter);
+	CLASSTYPE inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter);
 
 	void convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree);
 
@@ -71,12 +75,9 @@ void BST<CLASSTYPE>::insert(const CLASSTYPE& newMorse, const char& newchar) {
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderTraversal(const char& Letter) {
-	fstream outfile;
-	if (!outfile.is_open()) {
-		outfile.open("MorseOutput.txt", std::ios::out);
-	}
-	inorderTraversal(outfile,this->mpRoot, Letter);
+CLASSTYPE BST<CLASSTYPE>::inorderTraversal(const char& Letter) {
+	
+	return inorderTraversal(this->mpRoot, Letter);
 }
 
 //private versions
@@ -126,31 +127,58 @@ void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse
 }
 
 template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderTraversal(fstream& outfile, BSTNode<CLASSTYPE>* pTree, const char& Letter) {
+CLASSTYPE BST<CLASSTYPE>::inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter) {
 	if (pTree != nullptr)
 	{
-		inorderTraversal(outfile, pTree->getLeftPtr(), Letter);
+		inorderTraversal(pTree->getLeftPtr(), Letter);
 		if (Letter == pTree->getmLetter()) {
-			cout << pTree->getmMorse() << " ";
-			outfile << pTree->getmMorse() << " ";
+			return pTree->getmMorse();
 		}
-		inorderTraversal(outfile, pTree->getRightPtr(), Letter);
+		inorderTraversal(pTree->getRightPtr(), Letter);
 	}
 	
 }
 
 template<class CLASSTYPE>
+void BST<CLASSTYPE>::inorderPrint() {
+	inorderPrint(this->mpRoot);
+}
+
+template<class CLASSTYPE>
+void BST<CLASSTYPE>::inorderPrint(BSTNode<CLASSTYPE>* pTree) {
+	if (pTree != nullptr)
+	{
+		inorderPrint(pTree->getLeftPtr());
+			cout << pTree->getmLetter() << endl;
+			cout << pTree->getmMorse() << endl;
+		inorderPrint(pTree->getRightPtr());
+	}
+
+}
+
+template<class CLASSTYPE>
 void BST<CLASSTYPE>::convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree) {
 	char data[100] = "";
+	fstream outfile;
+	if (!outfile.is_open()) {
+		outfile.open("MorseOutput.txt", std::ios::out);
+	}
+	CLASSTYPE dat;
 	while (!infile.eof()) {
 		infile.getline(data, 100);
 		int i = 0;
 		while (data[i] != '\0') {
-			toupper(data[i]);
-			inorderTraversal(data[i]);
+			data[i] = toupper(data[i]);
 			i++;
 		}
-		cout << endl;
+		i = 0;
+		while (data[i] != '\0') {
+			dat = dat + inorderTraversal(data[i]) ;
+			dat = dat + " ";
+			i++;
+		}
+		cout << dat << endl;
+		outfile << dat << endl;
 	}
 }
 
