@@ -50,6 +50,7 @@ private:
 //populate the BST on creation with the morse table
 template<class CLASSTYPE, class S>
 BST<CLASSTYPE, S>::BST() {
+	this->mpRoot = nullptr;
 	fstream table;
 	if (!table.is_open()) {
 		table.open("MorseTable.txt", std::ios::in);
