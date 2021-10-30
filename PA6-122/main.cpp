@@ -3,7 +3,7 @@
 int main(void) {
 	
 	//make the morsetable BST
-	BST<string> morsetable;
+	BST<string, char> morsetable;
 	//print the morse table
 	morsetable.inorderPrint();
 	fstream conversion;

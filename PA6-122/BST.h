@@ -16,7 +16,7 @@ using std::vector;
 using std::string;
 
 //class template for a BST
-template <class CLASSTYPE>
+template <class CLASSTYPE, class S>
 class BST
 {
 public:
@@ -24,39 +24,39 @@ public:
 
 	~BST();
 
-	void insert(const CLASSTYPE& newMorse, const char& newchar);
+	void insert(const CLASSTYPE& newMorse, const S& newchar);
 
-	void inorderTraversal(const char& Letter);
+	void inorderTraversal(const S& Letter);
 
 	void convertText(fstream& infile);
 
 	void inorderPrint();
 
 private:
-	void inorderPrint(BSTNode<CLASSTYPE>* pTree);
+	void inorderPrint(BSTNode<CLASSTYPE, S>* pTree);
 
-	void insert(BSTNode<CLASSTYPE>* pTree,
-		const CLASSTYPE& newMorse, const char& newChar);
+	void insert(BSTNode<CLASSTYPE, S>* pTree,
+		const CLASSTYPE& newMorse, const S& newChar);
 
-	void chopTree(BSTNode<CLASSTYPE>* pTree);
+	void chopTree(BSTNode<CLASSTYPE, S>* pTree);
 
-	void inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter);
+	void inorderTraversal(BSTNode<CLASSTYPE, S>* pTree, const S& Letter);
 
-	void convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree);
+	void convertText(fstream& infile, BSTNode<CLASSTYPE, S>* pTree);
 
-	BSTNode<CLASSTYPE>* mpRoot;
+	BSTNode<CLASSTYPE, S>* mpRoot;
 };
 
 //populate the BST on creation with the morse table
-template<class CLASSTYPE>
-BST<CLASSTYPE>::BST() {
+template<class CLASSTYPE, class S>
+BST<CLASSTYPE, S>::BST() {
 	fstream table;
 	if (!table.is_open()) {
 		table.open("MorseTable.txt", std::ios::in);
 		while (!table.eof()) {
-			char morse[100] = "";
-			char character = '\0';
-			char throwaway[20] = "";
+			S morse[100] = "";
+			S character = '\0';
+			S throwaway[20] = "";
 			table.get(character);
 			table.getline(throwaway, 100);
 			table.getline(morse, 100);
@@ -67,27 +67,27 @@ BST<CLASSTYPE>::BST() {
 }
 
 //destroys the tree using a chop tree helper function
-template<class CLASSTYPE>
-BST<CLASSTYPE>::~BST() {
+template<class CLASSTYPE, class S>
+BST<CLASSTYPE, S>::~BST() {
 	chopTree(this->mpRoot);
 }
 
 //public insert
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::insert(const CLASSTYPE& newMorse, const char& newchar) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::insert(const CLASSTYPE& newMorse, const S& newchar) {
 	insert(this->mpRoot, newMorse, newchar);
 }
 
 //public inorder traversal 
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderTraversal(const char& Letter) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::inorderTraversal(const S& Letter) {
 	
 	inorderTraversal(this->mpRoot, Letter);
 }
 
 //private versions
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::chopTree(BSTNode<CLASSTYPE>* pTree) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::chopTree(BSTNode<CLASSTYPE, S>* pTree) {
 	if (pTree != nullptr) {
 		chopTree(pTree->getLeftPtr());
 		chopTree(pTree->getRightPtr());
@@ -96,11 +96,11 @@ void BST<CLASSTYPE>::chopTree(BSTNode<CLASSTYPE>* pTree) {
 }
 
 //private insert
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse, const char& newChar) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::insert(BSTNode<CLASSTYPE, S>* pTree, const CLASSTYPE& newMorse, const S& newChar) {
 	if (pTree == nullptr)
 	{
-		this->mpRoot = new BSTNode<CLASSTYPE>(newMorse, newChar);
+		this->mpRoot = new BSTNode<CLASSTYPE, S>(newMorse, newChar);
 	}
 	else
 	{
@@ -108,7 +108,7 @@ void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse
 		{
 			if (pTree->getLeftPtr() == nullptr)
 			{
-				pTree->setLeftPtr(new BSTNode<CLASSTYPE>(newMorse, newChar));
+				pTree->setLeftPtr(new BSTNode<CLASSTYPE, S>(newMorse, newChar));
 			}
 			else
 			{
@@ -121,7 +121,7 @@ void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse
 
 			if (pTree->getRightPtr() == nullptr)
 			{
-				pTree->setRightPtr(new BSTNode<CLASSTYPE>(newMorse, newChar));
+				pTree->setRightPtr(new BSTNode<CLASSTYPE, S>(newMorse, newChar));
 			}
 			else
 			{
@@ -133,8 +133,8 @@ void BST<CLASSTYPE>::insert(BSTNode<CLASSTYPE>* pTree, const CLASSTYPE& newMorse
 }
 
 //private inorderTraversal which prints out the morse code of the letter entere
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Letter) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::inorderTraversal(BSTNode<CLASSTYPE, S>* pTree, const S& Letter) {
 	if (pTree != nullptr)
 	{
 		inorderTraversal(pTree->getLeftPtr(), Letter);
@@ -147,13 +147,13 @@ void BST<CLASSTYPE>::inorderTraversal(BSTNode<CLASSTYPE>* pTree, const char& Let
 }
 
 //prints which prints in order of the tree which starts leftmost starting with my space character
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderPrint() {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::inorderPrint() {
 	inorderPrint(this->mpRoot);
 }
 
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::inorderPrint(BSTNode<CLASSTYPE>* pTree) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::inorderPrint(BSTNode<CLASSTYPE, S>* pTree) {
 	if (pTree != nullptr)
 	{
 		inorderPrint(pTree->getLeftPtr());
@@ -165,8 +165,8 @@ void BST<CLASSTYPE>::inorderPrint(BSTNode<CLASSTYPE>* pTree) {
 }
 
 //converting text from a file take lines to upper case and insert each char into the traversal function which then prints the stuff.
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::convertText(fstream& infile, BSTNode<CLASSTYPE, S>* pTree) {
 	char data[100] = "";
 	CLASSTYPE dat;
 	while (!infile.eof()) {
@@ -181,8 +181,8 @@ void BST<CLASSTYPE>::convertText(fstream& infile, BSTNode<CLASSTYPE>* pTree) {
 	}
 }
 
-template<class CLASSTYPE>
-void BST<CLASSTYPE>::convertText(fstream& infile) {
+template<class CLASSTYPE, class S>
+void BST<CLASSTYPE, S>::convertText(fstream& infile) {
 	
 	convertText(infile ,this->mpRoot);
 }
