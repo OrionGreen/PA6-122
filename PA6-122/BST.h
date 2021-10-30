@@ -168,7 +168,7 @@ void BST<CLASSTYPE, S>::inorderPrint(BSTNode<CLASSTYPE, S>* pTree) {
 //converting text from a file take lines to upper case and insert each char into the traversal function which then prints the stuff.
 template<class CLASSTYPE, class S>
 void BST<CLASSTYPE, S>::convertText(fstream& infile, BSTNode<CLASSTYPE, S>* pTree) {
-	char data[100] = "";
+	S data[100] = "";
 	CLASSTYPE dat;
 	while (!infile.eof()) {
 		infile.getline(data, 100);
